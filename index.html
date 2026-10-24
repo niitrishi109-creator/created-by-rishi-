@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0714">
+  <title>Rishi Voice AI</title>
+  <meta name="description" content="Rishi Voice AI - Hindi, Hinglish aur English text se AI voice banao.">
+
+  <style>
+    :root {
+      --bg: #0b0714;
+      --panel: #151022;
+      --panel2: #1d1530;
+      --pink: #ff4da6;
+      --purple: #a855f7;
+      --text: #f8f5ff;
+      --muted: #b6abc9;
+      --border: rgba(255,255,255,.1);
+      --green: #4ade80;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(ellipse at 10% 0%, rgba(168,85,247,.18), transparent 35%),
+        radial-gradient(ellipse at 100% 15%, rgba(255,77,166,.12), transparent 30%),
+        var(--bg);
+      color: var(--text);
+      font-family: Inter, "Segoe UI", Arial, sans-serif;
+    }
+
+    button, textarea, select, input { font: inherit; }
+
+    button { cursor: pointer; }
+
+    .topbar {
+      width: min(1100px, 92%);
+      margin: auto;
+      padding: 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+    }
+
+    .logo {
+      font-size: 23px;
+      font-weight: 900;
+      letter-spacing: 1px;
+    }
+
+    .logo span {
+      color: var(--pink);
+    }
+
+    .status {
+      color: #d8c5f8;
+      border: 1px solid rgba(168,85,247,.35);
+      background: rgba(168,85,247,.1);
+      padding: 8px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+    }
+
+    .hero {
+      width: min(850px, 92%);
+      margin: 28px auto 30px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      color: #e9b8ff;
+      font-size: 12px;
+      letter-spacing: 2px;
+      font-weight: 800;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      font-size: clamp(36px, 7vw, 64px);
+      line-height: 1.08;
+      margin: 17px 0;
+      letter-spacing: -2px;
+    }
+
+    h1 span {
+      background: linear-gradient(90deg, var(--purple), var(--pink));
+      color: transparent;
+      background-clip: text;
+      -webkit-background-clip: text;
+    }
+
+    .hero p {
+      color: var(--muted);
+      max-width: 610px;
+      line-height: 1.7;
+      margin: auto;
+      font-size: 15px;
+    }
+
+    .container {
+      width: min(900px, 92%);
+      margin: 0 auto 50px;
+    }
+
+    .card {
+      background: linear-gradient(145deg, rgba(29,21,48,.96), rgba(17,12,29,.98));
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: clamp(18px, 4vw, 30px);
+      box-shadow: 0 20px 70px rgba(0,0,0,.25);
+      margin-bottom: 18px;
+    }
+
+    .section-title {
+      margin: 0 0 8px;
+      font-size: 19px;
+    }
+
+    .hint {
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 190px;
+      resize: vertical;
+      padding: 17px;
+      background: #0d0917;
+      color: var(--text);
+      border: 1px solid #352746;
+      border-radius: 14px;
+      outline: none;
+      line-height: 1.7;
+    }
+
+    textarea:focus, select:focus {
+      border-color: var(--purple);
+      box-shadow: 0 0 0 3px rgba(168,85,247,.12);
+    }
+
+    textarea::placeholder { color: #82768f; }
+
+    .text-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 8px;
+    }
+
+    .samples {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .chip {
+      color: #e9d5ff;
+      border: 1px solid #49305f;
+      background: #211431;
+      padding: 9px 12px;
+      border-radius: 30px;
+      font-size: 12px;
+    }
+
+    .chip:hover {
+      border-color: var(--pink);
+      background: #30183d;
+    }
+
+    .settings-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+      margin-top: 22px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    select {
+      width: 100%;
+      background: #0d0917;
+      color: var(--text);
+      border: 1px solid #352746;
+      padding: 13px;
+      border-radius: 12px;
+      outline: none;
+    }
+
+    .range-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 13px;
+    }
+
+    .range-value {
+      color: #f0abfc;
+      font-weight: 800;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--pink);
+    }
+
+    .primary {
+      width: 100%;
+      border: 0;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 24px;
+      color: white;
+      font-weight: 900;
+      background: linear-gradient(100deg, #8b5cf6, #ec4899);
+      box-shadow: 0 9px 30px rgba(168,85,247,.2);
+      transition: transform .15s, opacity .15s;
+    }
+
+    .primary:hover { transform: translateY(-1px); }
+    .primary:disabled { opacity: .55; cursor: wait; }
+
+    .message {
+      display: none;
+      margin-top: 15px;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 13px;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .message.show { display: block; }
+    .message.info { background: #211a38; color: #e9d5ff; }
+    .message.error { background: #3b1726; color: #fecdd3; }
+    .message.success { background: #103321; color: #bbf7d0; }
+
+    .result-card { display: none; }
+    .result-card.show { display: block; }
+
+    audio {
+      width: 100%;
+      margin: 15px 0;
+    }
+
+    .download {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      color: #07140c;
+      font-weight: 900;
+      background: var(--green);
+      padding: 13px 18px;
+      border-radius: 12px;
+    }
+
+    .download:hover { filter: brightness(1.08); }
+
+    .result-note {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 14px;
+    }
+
+    .features {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .feature {
+      background: rgba(255,255,255,.035);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      padding: 16px 12px;
+      text-align: center;
+    }
+
+    .feature .emoji { font-size: 23px; }
+    .feature strong { display: block; font-size: 13px; margin: 9px 0 5px; }
+    .feature small { color: var(--muted); line-height: 1.5; font-size: 11px; }
+
+    footer {
+      text-align: center;
+      color: #8e829e;
+      padding: 8px 15px 30px;
+      font-size: 12px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 600px) {
+      .topbar { padding: 18px 0; }
+      .logo { font-size: 19px; }
+      .status { font-size: 10px; padding: 7px 9px; }
+      .hero { margin-top: 25px; }
+      h1 { letter-spacing: -1.2px; }
+      .settings-grid { grid-template-columns: 1fr; }
+      .features { grid-template-columns: 1fr; }
+      .feature { display: flex; align-items: center; text-align: left; gap: 12px; }
+      .feature strong { margin: 0 0 4px; }
+      .feature .emoji { min-width: 35px; }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="logo">RISHI <span>VOICE AI</span></div>
+    <div class="status">✦ AI VOICE STUDIO</div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">YOUR VOICE. YOUR STYLE.</div>
+    <h1>Text ko banao <span>Powerful Voice</span></h1>
+    <p>
+      Apne Hindi, Hinglish ya English text ko voice mein badlo.
+      Reels, YouTube Shorts, storytelling aur content creation ke liye.
+    </p>
+  </section>
+
+  <main class="container">
+    <section class="card">
+      <h2 class="section-title">✍️ Apna script likho</h2>
+      <p class="hint">
+        Jo text bulwana hai, yahan likho ya neeche diye gaye sample se shuru karo.
+      </p>
+
+      <textarea
+        id="scriptText"
+        maxlength="5000"
+        placeholder="Yahan apna Hindi, Hinglish ya English script likho..."
+        aria-label="Voice banane ke liye text"
+      ></textarea>
+
+      <div class="text-meta">
+        <span>Maximum 5000 characters</span>
+        <span id="charCount">0 / 5000</span>
+      </div>
+
+      <div class="samples">
+        <button class="chip" type="button" data-sample="reel">🔥 Reel Hook</button>
+        <button class="chip" type="button" data-sample="motivation">💪 Motivation</button>
+        <button class="chip" type="button" data-sample="story">📖 Storytelling</button>
+        <button class="chip" type="button" data-sample="english">🌎 English</button>
+      </div>
+
+      <div class="settings-grid">
+        <div class="field">
+          <label for="voice">🎙️ Voice select karo</label>
+          <select id="voice">
+            <option value="hi-female">Hindi Female — Swara</option>
+            <option value="hi-male">Hindi Male — Madhur</option>
+            <option value="en-india-female">Indian English Female — Neerja</option>
+            <option value="en-india-male">Indian English Male — Prabhat</option>
+            <option value="en-us-female">US English Female — Aria</option>
+            <option value="en-us-male">US English Male — Guy</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="style">🎬 Content style</label>
+          <select id="style">
+            <option value="reel">Energetic Reels</option>
+            <option value="normal">Normal / Natural</option>
+            <option value="story">Storytelling</option>
+            <option value="news">News Presenter</option>
+            <option value="calm">Calm Voice</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <div class="range-head">
+            <label for="speed">⚡ Voice speed</label>
+            <span class="range-value" id="speedValue">+15%</span>
+          </div>
+          <input id="speed" type="range" min="-50" max="50" value="15">
+          <div class="text-meta"><span>Slow</span><span>Fast</span></div>
+        </div>
+
+        <div class="field">
+          <div class="range-head">
+            <label for="pitch">🎵 Voice pitch</label>
+            <span class="range-value" id="pitchValue">+4 Hz</span>
+          </div>
+          <input id="pitch" type="range" min="-10" max="10" value="4">
+          <div class="text-meta"><span>Deep</span><span>High</span></div>
+        </div>
+      </div>
+
+      <button class="primary" id="generateBtn" type="button">
+        ✨ Generate AI Voice
+      </button>
+
+      <div id="message" class="message" role="status" aria-live="polite"></div>
+    </section>
+
+    <section class="card result-card" id="resultCard">
+      <h2 class="section-title">🎧 Tumhari voice ready hai!</h2>
+      <p class="hint">Audio suno. Pasand aaye to MP3 download kar lo.</p>
+
+      <audio id="audioPlayer" controls preload="metadata"></audio>
+
+      <a id="downloadLink" class="download" href="#" download>
+        ⬇️ Download MP3
+      </a>
+
+      <p class="result-note">
+        Note: Ye voice internet service se generate hoti hai. Audio ko dobara
+        sunne ya download karne ke liye generated file server par rehni chahiye.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2 class="section-title">💜 Rishi Voice AI mein kya hai?</h2>
+      <div class="features">
+        <div class="feature">
+          <div class="emoji">🌐</div>
+          <div>
+            <strong>Multiple voices</strong>
+            <small>Hindi aur English voice options</small>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="emoji">🎛️</div>
+          <div>
+            <strong>Voice controls</strong>
+            <small>Speed aur pitch adjust karo</small>
+          </div>
+        </div>
+        <div class="feature">
+          <div class="emoji">📲</div>
+          <div>
+            <strong>Mobile friendly</strong>
+            <small>Responsive website design</small>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Rishi Voice AI · Made for creators 💜<br>
+    Voice generation ke liye internet connection zaroori hai.
+  </footer>
+
+  <script>
+    "use strict";
+
+    const textBox = document.getElementById("scriptText");
+    const charCount = document.getElementById("charCount");
+    const voiceSelect = document.getElementById("voice");
+    const styleSelect = document.getElementById("style");
+    const speedSlider = document.getElementById("speed");
+    const pitchSlider = document.getElementById("pitch");
+    const speedValue = document.getElementById("speedValue");
+    const pitchValue = document.getElementById("pitchValue");
+    const generateBtn = document.getElementById("generateBtn");
+    const messageBox = document.getElementById("message");
+    const resultCard = document.getElementById("resultCard");
+    const audioPlayer = document.getElementById("audioPlayer");
+    const downloadLink = document.getElementById("downloadLink");
+
+    const samples = {
+      reel:
+        "Ruko! Agar tum apni life mein kuch bada karna chahte ho, " +
+        "to aaj se apne sapno ke liye kaam shuru karo. " +
+        "Kyunki sahi waqt ka intezar karte karte waqt nikal jaata hai!",
+
+      motivation:
+        "Duniya tumhe tab tak nahi samjhegi, jab tak tum khud ko " +
+        "sabit nahi kar dete. Mehnat karte raho, apna waqt zaroor aayega.",
+
+      story:
+        "Ek chhote se shehar mein ek ladka rehta tha. Uske paas " +
+        "zyada paise nahi the, lekin uske sapne bahut bade the. " +
+        "Usne haar maanne ke bajaye har din kuch naya seekhna shuru kiya.",
+
+      english:
+        "Welcome back to the channel! Today, we are going to explore " +
+        "something amazing. Stay until the end, because you don't " +
+        "want to miss what happens next."
+    };
+
+    function updateCount() {
+      charCount.textContent = `${textBox.value.length} / 5000`;
+    }
+
+    function updateSliders() {
+      const speed = Number(speedSlider.value);
+      const pitch = Number(pitchSlider.value);
+
+      speedValue.textContent = `${speed > 0 ? "+" : ""}${speed}%`;
+      pitchValue.textContent = `${pitch > 0 ? "+" : ""}${pitch} Hz`;
+    }
+
+    function showMessage(text, type) {
+      messageBox.textContent = text;
+      messageBox.className = `message show ${type}`;
+    }
+
+    function hideMessage() {
+      messageBox.textContent = "";
+      messageBox.className = "message";
+    }
+
+    document.querySelectorAll("[data-sample]").forEach((button) => {
+      button.addEventListener("click", () => {
+        const sample = samples[button.dataset.sample];
+        if (sample) {
+          textBox.value = sample;
+          updateCount();
+          textBox.focus();
+        }
+      });
+    });
+
+    textBox.addEventListener("input", updateCount);
+    speedSlider.addEventListener("input", updateSliders);
+    pitchSlider.addEventListener("input", updateSliders);
+
+    styleSelect.addEventListener("change", () => {
+      const style = styleSelect.value;
+
+      if (style === "reel") {
+        speedSlider.value = 20;
+        pitchSlider.value = 5;
+      } else if (style === "normal") {
+        speedSlider.value = 0;
+        pitchSlider.value = 0;
+      } else if (style === "story") {
+        speedSlider.value = -8;
+        pitchSlider.value = 0;
+      } else if (style === "news") {
+        speedSlider.value = 5;
+        pitchSlider.value = 1;
+      } else if (style === "calm") {
+        speedSlider.value = -15;
+        pitchSlider.value = -2;
+      }
+
+      updateSliders();
+    });
+
+    generateBtn.addEventListener("click", async () => {
+      const text = textBox.value.trim();
+
+      if (!text) {
+        showMessage("Pehle apna script likho ya sample select karo.", "error");
+        textBox.focus();
+        return;
+      }
+
+      if (text.length > 5000) {
+        showMessage("Text 5000 characters se chhota rakho.", "error");
+        return;
+      }
+
+      generateBtn.disabled = true;
+      generateBtn.textContent = "⏳ Voice ban rahi hai...";
+      resultCard.classList.remove("show");
+      hideMessage();
+
+      showMessage(
+        "Voice generate ho rahi hai. Internet speed ke hisaab se thoda waqt lag sakta hai...",
+        "info"
+      );
+
+      try {
+        const response = await fetch("/api/generate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            text: text,
+            voice: voiceSelect.value,
+            speed: Number(speedSlider.value),
+            pitch: Number(pitchSlider.value)
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.detail || "Voice generate nahi ho paayi.");
+        }
+
+        const audioUrl = data.audio_url;
+        const downloadUrl = data.download_url;
+
+        audioPlayer.pause();
+        audioPlayer.src = audioUrl;
+        audioPlayer.load();
+
+        downloadLink.href = downloadUrl;
+        downloadLink.download = data.filename || "rishi_voice.mp3";
+
+        resultCard.classList.add("show");
+        showMessage("Voice successfully generate ho gayi! 🎉", "success");
+
+        resultCard.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (error) {
+        showMessage(
+          error.message ||
+          "Server se connect nahi ho paaya. Check karo ki app.py server chal raha hai.",
+          "error"
+        );
+      } finally {
+        generateBtn.disabled = false;
+        generateBtn.textContent = "✨ Generate AI Voice";
+      }
+    });
+
+    updateCount();
+    updateSliders();
+  </script>
+</body>
+</html>

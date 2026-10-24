@@ -2,11 +2,22 @@
 {
   "name": "Rishi Voice AI",
   "short_name": "Rishi AI",
-  "description": "Hindi, Hinglish aur English voice generator",
+  "description": "Hindi, Hinglish aur English AI Voice Generator",
   "start_url": "/created-by-rishi-/",
   "scope": "/created-by-rishi-/",
   "display": "standalone",
   "background_color": "#090014",
   "theme_color": "#a855f7",
-  "icons": []
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
 }
